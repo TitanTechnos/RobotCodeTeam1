@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
+@TeleOp(name="OpMode", group="Basic Opmode")
 //@Disabled
 public class TestOpMode extends OpMode {
     // Declare OpMode members.
