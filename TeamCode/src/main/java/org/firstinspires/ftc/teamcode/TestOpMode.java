@@ -57,6 +57,9 @@ public class TestOpMode extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor horizontalArm = null;
+    private DcMotor verticalArm = null;
+    private int speedDenominator = 2; //1 = full speed, 2 = half speed, 4 = quarter speed, etc.
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -101,8 +104,10 @@ public class TestOpMode extends OpMode {
     @Override
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
-        double leftPower;
-        double rightPower;
+        double leftWheelPower;
+        double rightWheelPower;
+        double clawHorizontalPower;
+        double clawVerticalPower;
 
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
@@ -110,8 +115,8 @@ public class TestOpMode extends OpMode {
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
 
-        leftPower    = Range.clip(-gamepad1.left_stick_x/2, -1.0, 1.0) ;
-        rightPower   = Range.clip(gamepad1.right_stick_y/2, -1.0, 1.0) ;
+        leftWheelPower = Range.clip(-gamepad1.left_stick_x/2, -1.0, 1.0);
+        rightWheelPower = Range.clip(gamepad1.right_stick_y/2, -1.0, 1.0);
 
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -119,12 +124,12 @@ public class TestOpMode extends OpMode {
         // rightPower = -gamepad1.right_stick_y ;
 
         // Send calculated power to wheels
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
+        leftDrive.setPower(leftWheelPower);
+        rightDrive.setPower(rightWheelPower);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftWheelPower, rightWheelPower);
     }
 
     /*
