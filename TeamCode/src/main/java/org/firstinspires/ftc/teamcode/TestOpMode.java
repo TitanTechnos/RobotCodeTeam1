@@ -109,11 +109,7 @@ public class TestOpMode extends OpMode {
         double clawHorizontalPower;
         double clawVerticalPower;
 
-        //Calculate wheel power
-
-        leftWheelPower = Range.clip(-gamepad1.left_stick_x/speedDenominator, -1.0, 1.0);
-        rightWheelPower = Range.clip(gamepad1.right_stick_y/speedDenominator, -1.0, 1.0);
-
+        //Change speed
         if (gamepad1.a){
             speedDenominator = 2;
         } else if (gamepad1.x){
@@ -121,6 +117,11 @@ public class TestOpMode extends OpMode {
         } else if (gamepad1.b){
             speedDenominator = 4;
         }
+
+        //Calculate wheel power
+
+        leftWheelPower = Range.clip(-gamepad1.left_stick_x/speedDenominator, -1.0, 1.0);
+        rightWheelPower = Range.clip(gamepad1.right_stick_y/speedDenominator, -1.0, 1.0);
 
         if(gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
             clawHorizontalPower = gamepad2.right_trigger;
