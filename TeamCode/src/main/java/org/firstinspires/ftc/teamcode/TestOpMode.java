@@ -36,20 +36,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-/**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all iterative OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
 @TeleOp(name="OpMode", group="Basic Opmode")
 //@Disabled
 public class TestOpMode extends OpMode {
@@ -57,7 +43,6 @@ public class TestOpMode extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
-    private DcMotor horizontalArm = null;
     private DcMotor verticalArm = null;
     private int speedDenominator = 2; //1 = full speed, 2 = half speed, 4 = quarter speed, etc.
 
@@ -66,20 +51,15 @@ public class TestOpMode extends OpMode {
      */
     @Override
     public void init() {
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Initializing");
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        verticalArm = hardwareMap.get(DcMotor.class, "arm");
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        //leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        //rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
-        // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
 
@@ -106,7 +86,6 @@ public class TestOpMode extends OpMode {
         // Variables
         double leftWheelPower;
         double rightWheelPower;
-        double clawHorizontalPower;
         double clawVerticalPower;
 
         //Change speed
@@ -120,21 +99,15 @@ public class TestOpMode extends OpMode {
 
         //Calculate wheel power
 
-        leftWheelPower = Range.clip(-gamepad1.left_stick_x/speedDenominator, -1.0, 1.0);
-        rightWheelPower = Range.clip(gamepad1.right_stick_y/speedDenominator, -1.0, 1.0);
+        leftWheelPower = gamepad1.left_stick_x/speedDenominator;
+        rightWheelPower = gamepad1.right_stick_y/speedDenominator;
+
+        //Calculate arm power
 
         if(gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
-            clawHorizontalPower = gamepad2.right_trigger;
+            clawVerticalPower = gamepad2.right_trigger;
         } else if(gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
-            clawHorizontalPower = -gamepad2.left_trigger;
-        } else {
-            clawHorizontalPower = 0;
-        }
-
-        if(gamepad2.right_bumper && !gamepad2.left_bumper){
-            clawVerticalPower = 0.5;
-        } else if(gamepad2.left_bumper && !gamepad2.right_bumper){
-            clawVerticalPower = -0.5;
+            clawVerticalPower = -gamepad2.left_trigger;
         } else {
             clawVerticalPower = 0;
         }
@@ -142,12 +115,12 @@ public class TestOpMode extends OpMode {
         //Set motor power
         leftDrive.setPower(leftWheelPower);
         rightDrive.setPower(rightWheelPower);
-        horizontalArm.setPower(clawHorizontalPower);
         verticalArm.setPower(clawVerticalPower);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftWheelPower, rightWheelPower);
+        telemetry.addData("Wheels", "left (%.2f), right (%.2f)", leftWheelPower, rightWheelPower);
+        telemetry.addData("Arm", "Power: " + String.valueOf(clawVerticalPower));
     }
 
     /*
