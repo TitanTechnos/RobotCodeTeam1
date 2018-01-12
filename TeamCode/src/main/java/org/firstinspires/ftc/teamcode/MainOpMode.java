@@ -5,11 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="OpMode", group="Basic Opmode")
 //@Disabled
-public class MainOpMode extends OpMode { //TODO: Finish Claw Extension
+public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
@@ -17,6 +18,7 @@ public class MainOpMode extends OpMode { //TODO: Finish Claw Extension
     private DcMotor verticalArm = null;
     private CRServo clawJointOne = null;
     private CRServo clawJointTwo = null;
+    private Servo claw = null;
     private int speedDenominator = 2; //1 = full speed, 2 = half speed, 4 = quarter speed, etc.
     private boolean first = true;
 
@@ -32,6 +34,7 @@ public class MainOpMode extends OpMode { //TODO: Finish Claw Extension
         verticalArm = hardwareMap.get(DcMotor.class, "arm");
         clawJointOne = hardwareMap.get(CRServo.class, "joint_one");
         clawJointTwo = hardwareMap.get(CRServo.class, "joint_two");
+        claw = hardwareMap.get(Servo.class, "claw");
 
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
@@ -51,6 +54,7 @@ public class MainOpMode extends OpMode { //TODO: Finish Claw Extension
     @Override
     public void start() {
         runtime.reset();
+        claw.setPosition(0);
     }
 
     /*
@@ -110,6 +114,16 @@ public class MainOpMode extends OpMode { //TODO: Finish Claw Extension
             jointTwoPower = 0;
         }
 
+        //Claw Extension
+        if (gamepad2.a){
+            claw.setPosition(0);
+        } else if (gamepad2.x){
+            claw.setPosition(1);
+        } else if (gamepad2.b){
+            claw.setPosition(0.9);
+        }
+
+
         //Set motor power
         leftDrive.setPower(leftWheelPower);
         rightDrive.setPower(rightWheelPower);
@@ -126,6 +140,7 @@ public class MainOpMode extends OpMode { //TODO: Finish Claw Extension
         telemetry.addData("Joint One", "Power: " + String.valueOf(jointOnePower));
         telemetry.addData("Joint Two", "Power: " + String.valueOf(jointTwoPower));
         telemetry.addData("Currently Controlling: ", (first ? "Joint One" : "Joint Two"));
+        telemetry.addData("Claw Position: ", String.valueOf(claw.getPosition()));
     }
 
     /*
@@ -133,6 +148,7 @@ public class MainOpMode extends OpMode { //TODO: Finish Claw Extension
      */
     @Override
     public void stop() {
+        claw.setPosition(0);
     }
 
 }
