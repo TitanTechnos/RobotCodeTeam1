@@ -1,50 +1,24 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="OpMode", group="Basic Opmode")
 //@Disabled
-public class TestOpMode extends OpMode {
+public class MainOpMode extends OpMode { //TODO: Finish Claw Extension
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor verticalArm = null;
+    private CRServo clawJointOne = null;
+    private CRServo clawJointTwo = null;
     private int speedDenominator = 2; //1 = full speed, 2 = half speed, 4 = quarter speed, etc.
+    private boolean first = true;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -56,9 +30,10 @@ public class TestOpMode extends OpMode {
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         verticalArm = hardwareMap.get(DcMotor.class, "arm");
+        clawJointOne = hardwareMap.get(CRServo.class, "joint_one");
+        clawJointTwo = hardwareMap.get(CRServo.class, "joint_two");
 
-        //leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        //rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("Status", "Initialized");
     }
@@ -87,6 +62,8 @@ public class TestOpMode extends OpMode {
         double leftWheelPower;
         double rightWheelPower;
         double clawVerticalPower;
+        double jointOnePower;
+        double jointTwoPower;
 
         //Change speed
         if (gamepad1.a){
@@ -104,12 +81,33 @@ public class TestOpMode extends OpMode {
 
         //Calculate arm power
 
+        clawVerticalPower = gamepad2.right_stick_y/2;
+
+        //Calculate Claw Power (Joints)
+
+        if(gamepad2.left_bumper || gamepad2.right_bumper){
+            first = !first;
+        }
+
         if(gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
-            clawVerticalPower = gamepad2.right_trigger;
+            if(first){
+                jointOnePower = gamepad2.right_trigger;
+                jointTwoPower = 0;
+            } else {
+                jointTwoPower = gamepad2.right_trigger;
+                jointOnePower = 0;
+            }
         } else if(gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
-            clawVerticalPower = -gamepad2.left_trigger;
+            if(first){
+                jointOnePower = -gamepad2.left_trigger;
+                jointTwoPower = 0;
+            } else {
+                jointTwoPower = -gamepad2.left_trigger;
+                jointOnePower = 0;
+            }
         } else {
-            clawVerticalPower = 0;
+            jointOnePower = 0;
+            jointTwoPower = 0;
         }
 
         //Set motor power
@@ -117,10 +115,17 @@ public class TestOpMode extends OpMode {
         rightDrive.setPower(rightWheelPower);
         verticalArm.setPower(clawVerticalPower);
 
-        // Show the elapsed game time and wheel power.
+        //Set CRMotor power
+        clawJointOne.setPower(jointOnePower);
+        clawJointTwo.setPower(jointTwoPower);
+
+        // Show the elapsed game time and component power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Wheels", "left (%.2f), right (%.2f)", leftWheelPower, rightWheelPower);
         telemetry.addData("Arm", "Power: " + String.valueOf(clawVerticalPower));
+        telemetry.addData("Joint One", "Power: " + String.valueOf(jointOnePower));
+        telemetry.addData("Joint Two", "Power: " + String.valueOf(jointTwoPower));
+        telemetry.addData("Currently Controlling: ", (first ? "Joint One" : "Joint Two"));
     }
 
     /*
