@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="OpMode", group="Basic Opmode")
+@TeleOp(name = "OpMode", group = "Basic Opmode")
 //@Disabled
 public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
     // Declare OpMode members.
@@ -29,7 +29,7 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
     public void init() {
         telemetry.addData("Status", "Initializing");
 
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         verticalArm = hardwareMap.get(DcMotor.class, "arm");
         clawJointOne = hardwareMap.get(CRServo.class, "joint_one");
@@ -70,39 +70,36 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
         double jointTwoPower;
 
         //Change speed
-        if (gamepad1.a){
+        if (gamepad1.a) {
             speedDenominator = 2;
-        } else if (gamepad1.x){
+        } else if (gamepad1.x) {
             speedDenominator = 1;
-        } else if (gamepad1.b){
+        } else if (gamepad1.b) {
             speedDenominator = 4;
         }
 
         //Calculate wheel power
-
-        leftWheelPower = gamepad1.left_stick_x/speedDenominator;
-        rightWheelPower = gamepad1.right_stick_y/speedDenominator;
+        leftWheelPower = gamepad1.left_stick_x / speedDenominator;
+        rightWheelPower = gamepad1.right_stick_y / speedDenominator;
 
         //Calculate arm power
-
-        clawVerticalPower = gamepad2.right_stick_y/2;
+        clawVerticalPower = gamepad2.right_stick_y / 2;
 
         //Calculate Claw Power (Joints)
-
-        if(gamepad2.left_bumper || gamepad2.right_bumper){
+        if (gamepad2.left_bumper || gamepad2.right_bumper) {
             first = !first;
         }
 
-        if(gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
-            if(first){
+        if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)) {
+            if (first) {
                 jointOnePower = gamepad2.right_trigger;
                 jointTwoPower = 0;
             } else {
                 jointTwoPower = gamepad2.right_trigger;
                 jointOnePower = 0;
             }
-        } else if(gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
-            if(first){
+        } else if (gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)) {
+            if (first) {
                 jointOnePower = -gamepad2.left_trigger;
                 jointTwoPower = 0;
             } else {
@@ -115,11 +112,11 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
         }
 
         //Claw Extension
-        if (gamepad2.a){
+        if (gamepad2.a) {
             claw.setPosition(0);
-        } else if (gamepad2.x){
+        } else if (gamepad2.x) {
             claw.setPosition(1);
-        } else if (gamepad2.b){
+        } else if (gamepad2.b) {
             claw.setPosition(0.9);
         }
 
