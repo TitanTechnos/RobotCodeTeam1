@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp 17-18", group = "TeleOp")
@@ -13,12 +11,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
-    private DcMotor verticalArm = null;
-    private CRServo clawJointOne = null;
-    private CRServo clawJointTwo = null;
-    private Servo claw = null;
+
+    private Hardware robot = new Hardware(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     private int speedDenominator = 2; //1 = full speed, 2 = half speed, 4 = quarter speed, etc.
     private boolean first = true;
 
@@ -29,14 +24,8 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
     public void init() {
         telemetry.addData("Status", "Initializing");
 
-        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        verticalArm = hardwareMap.get(DcMotor.class, "arm");
-        clawJointOne = hardwareMap.get(CRServo.class, "joint_one");
-        clawJointTwo = hardwareMap.get(CRServo.class, "joint_two");
-        claw = hardwareMap.get(Servo.class, "claw");
-
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        //Initialize Robot
+        robot.init(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
     }
@@ -54,7 +43,7 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
     @Override
     public void start() {
         runtime.reset();
-        claw.setPosition(0);
+        robot.claw.setPosition(0);
     }
 
     /*
@@ -85,11 +74,12 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
         //Calculate arm power
         clawVerticalPower = gamepad2.right_stick_y / 2;
 
-        //Calculate Claw Power (Joints)
+        //Switch which joint is being controlled
         if (gamepad2.left_bumper || gamepad2.right_bumper) {
             first = !first;
         }
 
+        //Calculate arm joint movement
         if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)) {
             if (first) {
                 jointOnePower = gamepad2.right_trigger;
@@ -113,31 +103,34 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
 
         //Claw Extension
         if (gamepad2.a) {
-            claw.setPosition(0);
+            robot.claw.setPosition(0);
         } else if (gamepad2.x) {
-            claw.setPosition(1);
+            robot.claw.setPosition(1);
         } else if (gamepad2.b) {
-            claw.setPosition(0.9);
+            robot.claw.setPosition(0.9);
         }
 
 
         //Set motor power
-        leftDrive.setPower(leftWheelPower);
-        rightDrive.setPower(rightWheelPower);
-        verticalArm.setPower(clawVerticalPower);
+        robot.leftDrive.setPower(leftWheelPower);
+        robot.rightDrive.setPower(rightWheelPower);
+        robot.verticalArm.setPower(clawVerticalPower);
 
         //Set CRMotor power
-        clawJointOne.setPower(jointOnePower);
-        clawJointTwo.setPower(jointTwoPower);
+        robot.clawJointOne.setPower(jointOnePower);
+        robot.clawJointTwo.setPower(jointTwoPower);
 
         // Show the elapsed game time and component power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addLine();
         telemetry.addData("Wheels", "left (%.2f), right (%.2f)", leftWheelPower, rightWheelPower);
         telemetry.addData("Arm", "Power: " + String.valueOf(clawVerticalPower));
+        telemetry.addLine();
+        telemetry.addData("Currently Controlling:", (first ? "Joint One" : "Joint Two"));
         telemetry.addData("Joint One", "Power: " + String.valueOf(jointOnePower));
         telemetry.addData("Joint Two", "Power: " + String.valueOf(jointTwoPower));
-        telemetry.addData("Currently Controlling: ", (first ? "Joint One" : "Joint Two"));
-        telemetry.addData("Claw Position: ", String.valueOf(claw.getPosition()));
+        telemetry.addLine();
+        telemetry.addData("Claw Position:", String.valueOf(robot.claw.getPosition()));
     }
 
     /*
@@ -145,7 +138,6 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
      */
     @Override
     public void stop() {
-        claw.setPosition(0);
     }
 
 }
