@@ -9,9 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name = "TeleOp 17-18", group = "TeleOp")
 //@Disabled
 public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
 
+    private ElapsedTime runtime = new ElapsedTime();
     private Hardware robot = new Hardware(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     private int speedDenominator = 2; //1 = full speed, 2 = half speed, 4 = quarter speed, etc.
@@ -109,7 +108,6 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
         } else if (gamepad2.b) {
             robot.claw.setPosition(0.9);
         }
-
 
         //Set motor power
         robot.leftDrive.setPower(leftWheelPower);
