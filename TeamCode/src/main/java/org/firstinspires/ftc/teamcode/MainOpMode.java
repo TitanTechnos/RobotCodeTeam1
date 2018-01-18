@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp 17-18", group = "TeleOp")
 //@Disabled
-public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
+public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
 
     private ElapsedTime runtime = new ElapsedTime();
     private Hardware robot = new Hardware(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -67,7 +67,7 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
         }
 
         //Calculate wheel power
-        leftWheelPower = gamepad1.left_stick_x / speedDenominator;
+        leftWheelPower = gamepad1.left_stick_y / speedDenominator;
         rightWheelPower = gamepad1.right_stick_y / speedDenominator;
 
         //Calculate arm power
@@ -104,9 +104,9 @@ public class MainOpMode extends OpMode { //TODO: Test Claw Extension & Joints
         if (gamepad2.a) {
             robot.claw.setPosition(0);
         } else if (gamepad2.x) {
-            robot.claw.setPosition(1);
+            robot.claw.setPosition(0.5);
         } else if (gamepad2.b) {
-            robot.claw.setPosition(0.9);
+            robot.claw.setPosition(0.4);
         }
 
         //Set motor power
