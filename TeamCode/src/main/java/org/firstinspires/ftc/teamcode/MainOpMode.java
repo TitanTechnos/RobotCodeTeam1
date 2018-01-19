@@ -122,6 +122,7 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addLine();
         telemetry.addData("Wheels", "left (%.2f), right (%.2f)", leftWheelPower, rightWheelPower);
+        telemetry.addData("Speed Denominator:", String.valueOf(speedDenominator));
         telemetry.addData("Arm", "Power: " + String.valueOf(clawVerticalPower));
         telemetry.addLine();
         telemetry.addData("Currently Controlling:", (first ? "Joint One" : "Joint Two"));
