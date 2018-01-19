@@ -9,8 +9,8 @@ public class Hardware {
     DcMotor leftDrive = null;
     DcMotor rightDrive = null;
     DcMotor verticalArm = null;
-    CRServo clawJointOne = null;
-    CRServo clawJointTwo = null;
+    Servo clawJointOne = null;
+    Servo clawJointTwo = null;
     Servo claw = null;
 
     private DcMotor.RunMode initialMode = null;
@@ -23,8 +23,8 @@ public class Hardware {
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         verticalArm = hardwareMap.get(DcMotor.class, "arm");
-        clawJointOne = hardwareMap.get(CRServo.class, "joint_one");
-        clawJointTwo = hardwareMap.get(CRServo.class, "joint_two");
+        clawJointOne = hardwareMap.get(Servo.class, "joint_one");
+        clawJointTwo = hardwareMap.get(Servo.class, "joint_two");
         claw = hardwareMap.get(Servo.class, "claw");
 
         leftDrive.setMode(initialMode);

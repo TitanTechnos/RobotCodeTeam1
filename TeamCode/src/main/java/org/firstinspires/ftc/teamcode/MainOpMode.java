@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp 17-18", group = "TeleOp")
@@ -43,6 +44,7 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
     public void start() {
         runtime.reset();
         robot.claw.setPosition(0);
+        robot.clawJointOne.setPosition(0);
     }
 
     /*
@@ -54,8 +56,6 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
         double leftWheelPower;
         double rightWheelPower;
         double clawVerticalPower;
-        double jointOnePower;
-        double jointTwoPower;
 
         //Change speed
         if (gamepad1.a) {
@@ -79,26 +79,7 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
         }
 
         //Calculate arm joint movement
-        if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)) {
-            if (first) {
-                jointOnePower = gamepad2.right_trigger;
-                jointTwoPower = 0;
-            } else {
-                jointTwoPower = gamepad2.right_trigger;
-                jointOnePower = 0;
-            }
-        } else if (gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)) {
-            if (first) {
-                jointOnePower = -gamepad2.left_trigger;
-                jointTwoPower = 0;
-            } else {
-                jointTwoPower = -gamepad2.left_trigger;
-                jointOnePower = 0;
-            }
-        } else {
-            jointOnePower = 0;
-            jointTwoPower = 0;
-        }
+
 
         //Claw Extension
         if (gamepad2.a) {
@@ -109,26 +90,27 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
             robot.claw.setPosition(0.4);
         }
 
+
+        robot.clawJointOne.setDirection(Servo.Direction.REVERSE);
+        robot.clawJointTwo.setDirection(Servo.Direction.REVERSE);
+        robot.clawJointOne.setPosition(gamepad2.right_trigger);
+        robot.clawJointTwo.setPosition(gamepad2.left_trigger);
+
+
         //Set motor power
         robot.leftDrive.setPower(leftWheelPower);
         robot.rightDrive.setPower(rightWheelPower);
         robot.verticalArm.setPower(clawVerticalPower);
 
-        //Set CRMotor power
-        robot.clawJointOne.setPower(jointOnePower);
-        robot.clawJointTwo.setPower(jointTwoPower);
-
         // Show the elapsed game time and component power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addLine();
-        telemetry.addData("Wheels", "left (%.2f), right (%.2f)", leftWheelPower, rightWheelPower);
+        telemetry.addData("Wheels", "left (%.2f), right (%.2f)", robot.leftDrive.getPower(), robot.rightDrive.getPower());
         telemetry.addData("Speed Denominator:", String.valueOf(speedDenominator));
-        telemetry.addData("Arm", "Power: " + String.valueOf(clawVerticalPower));
+        telemetry.addData("Arm", "Power: " + String.valueOf(robot.verticalArm.getPower()));
         telemetry.addLine();
-        telemetry.addData("Currently Controlling:", (first ? "Joint One" : "Joint Two"));
-        telemetry.addData("Joint One", "Power: " + String.valueOf(jointOnePower));
-        telemetry.addData("Joint Two", "Power: " + String.valueOf(jointTwoPower));
-        telemetry.addLine();
+        telemetry.addData("Joint One", "Position: " + String.valueOf(robot.clawJointOne.getPosition()));
+        telemetry.addData("Joint Two", "Position: " + String.valueOf(robot.clawJointTwo.getPosition()));
         telemetry.addData("Claw Position:", String.valueOf(robot.claw.getPosition()));
     }
 
