@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "TeleOp 17-18", group = "TeleOp")
+@TeleOp(name="TeleOp 17-18", group="TeleOp")
 //@Disabled
 public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
 
