@@ -45,6 +45,7 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
         runtime.reset();
         robot.claw.setPosition(0);
         robot.clawJointOne.setPosition(0);
+        robot.clawJointTwo.setPosition(0);
     }
 
     /*
