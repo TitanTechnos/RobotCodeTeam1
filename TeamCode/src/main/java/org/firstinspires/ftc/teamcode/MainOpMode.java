@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.CLOSED;
+import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.HALF;
+import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.OPEN;
+
 @TeleOp(name="TeleOp 17-18", group="TeleOp")
 //@Disabled
 public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
@@ -43,7 +47,7 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
     @Override
     public void start() {
         runtime.reset();
-        robot.claw.setPosition(0);
+        robot.clawSetPosition(OPEN);
         robot.clawJointOne.setPosition(0);
         robot.clawJointTwo.setPosition(0);
     }
@@ -83,12 +87,12 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
 
 
         //Claw Extension
-        if (gamepad2.a) {
-            robot.claw.setPosition(0);
+        if (gamepad2.b) {
+            robot.clawSetPosition(CLOSED);
+        } else if (gamepad2.a) {
+            robot.clawSetPosition(HALF);
         } else if (gamepad2.x) {
-            robot.claw.setPosition(0.5);
-        } else if (gamepad2.b) {
-            robot.claw.setPosition(0.4);
+            robot.clawSetPosition(OPEN);
         }
 
 
@@ -112,7 +116,7 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
         telemetry.addLine();
         telemetry.addData("Joint One", "Position: " + String.valueOf(robot.clawJointOne.getPosition()));
         telemetry.addData("Joint Two", "Position: " + String.valueOf(robot.clawJointTwo.getPosition()));
-        telemetry.addData("Claw Position:", String.valueOf(robot.claw.getPosition()));
+        telemetry.addData("Claw Position:", Hardware.ClawPosition.getPosition(robot.clawRight.getPosition()).getName());
     }
 
     /*
