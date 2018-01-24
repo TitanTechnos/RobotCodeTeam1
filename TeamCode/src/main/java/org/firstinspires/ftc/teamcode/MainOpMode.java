@@ -87,9 +87,9 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
 
         //Calculate arm joint movement
         robot.clawJointOne.setDirection(REVERSE);
-        robot.clawJointTwo.setDirection(FORWARD);
-        float jntOpn = gamepad2.right_trigger/10;
-        float jntCls = gamepad2.left_trigger/10;
+        robot.clawJointTwo.setDirection(REVERSE);
+        float jntOpn = gamepad2.right_trigger/50;
+        float jntCls = gamepad2.left_trigger/50;
         double jntOnePos = robot.clawJointOne.getPosition();
         double jntTwoPos = robot.clawJointTwo.getPosition();
 

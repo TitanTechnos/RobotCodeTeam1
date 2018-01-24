@@ -35,13 +35,14 @@ public class Hardware {
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        verticalArm.setDirection(DcMotor.Direction.FORWARD);
+        verticalArm.setDirection(DcMotor.Direction.REVERSE);
 
         leftDrive.setPower(0);
         rightDrive.setPower(0);
         verticalArm.setPower(0);
 
         clawRight.setDirection(Servo.Direction.REVERSE);
+        clawJointTwo.setDirection(Servo.Direction.REVERSE);
 
     }
 
@@ -51,7 +52,7 @@ public class Hardware {
     }
 
     enum ClawPosition {
-        OPEN(1, "OPEN"), HALF(0.5, "HALF"), CLOSED(0, "CLOSED");
+        OPEN(0, "OPEN"), HALF(0.5, "HALF"), CLOSED(1.0, "CLOSED");
 
         private final double pos;
         private final String name;
@@ -72,11 +73,11 @@ public class Hardware {
         static ClawPosition getPosition(double pos){
             int x = (int) Math.abs(pos * 10);
             switch (x){
-                case 0:
+                case 10:
                     return CLOSED;
                 case 5:
                     return HALF;
-                case 10:
+                case 1:
                     return OPEN;
                 default:
                     return OPEN;
