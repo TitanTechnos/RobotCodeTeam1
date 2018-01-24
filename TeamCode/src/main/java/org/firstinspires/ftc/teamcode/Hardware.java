@@ -45,9 +45,9 @@ public class Hardware {
 
     }
 
-    void clawSetPosition(ClawPosition status) {
-        clawLeft.setPosition(status.getDouble());
-        clawRight.setPosition(status.getDouble());
+    void clawSetPosition(ClawPosition position) {
+        clawLeft.setPosition(position.getDouble());
+        clawRight.setPosition(position.getDouble());
     }
 
     enum ClawPosition {

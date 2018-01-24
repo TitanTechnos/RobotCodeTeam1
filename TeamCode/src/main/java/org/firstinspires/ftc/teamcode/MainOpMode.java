@@ -7,13 +7,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import static com.qualcomm.robotcore.hardware.Servo.Direction.FORWARD;
+import static com.qualcomm.robotcore.hardware.Servo.Direction.REVERSE;
 import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.CLOSED;
 import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.HALF;
 import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.OPEN;
 
 @TeleOp(name="TeleOp 17-18", group="TeleOp")
 //@Disabled
-public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
+public class MainOpMode extends OpMode { //TODO: Recode Joints
 
     private ElapsedTime runtime = new ElapsedTime();
     private Hardware robot = new Hardware(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -58,9 +60,9 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
     @Override
     public void loop() {
         // Variables
-        double leftWheelPower;
-        double rightWheelPower;
-        double clawVerticalPower;
+        float leftWheelPower;
+        float rightWheelPower;
+        float clawVerticalPower;
 
         //Change speed
         if (gamepad1.a) {
@@ -84,7 +86,26 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
         }
 
         //Calculate arm joint movement
+        robot.clawJointOne.setDirection(REVERSE);
+        robot.clawJointTwo.setDirection(FORWARD);
+        float jntOpn = gamepad2.right_trigger/10;
+        float jntCls = gamepad2.left_trigger/10;
+        double jntOnePos = robot.clawJointOne.getPosition();
+        double jntTwoPos = robot.clawJointTwo.getPosition();
 
+        if(first){
+            if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
+                jntOnePos += jntOpn;
+            } else if (gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
+                jntOnePos -= jntCls;
+            }
+        } else {
+            if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
+                jntTwoPos += jntOpn;
+            } else if (gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
+                jntTwoPos -= jntCls;
+            }
+        }
 
         //Claw Extension
         if (gamepad2.b) {
@@ -95,12 +116,9 @@ public class MainOpMode extends OpMode { //TODO: Fix Claw Extension & Joints
             robot.clawSetPosition(OPEN);
         }
 
-
-        robot.clawJointOne.setDirection(Servo.Direction.REVERSE);
-        robot.clawJointTwo.setDirection(Servo.Direction.REVERSE);
-        robot.clawJointOne.setPosition(gamepad2.right_trigger);
-        robot.clawJointTwo.setPosition(gamepad2.left_trigger);
-
+        //Set joint position
+        robot.clawJointOne.setPosition(jntOnePos);
+        robot.clawJointTwo.setPosition(jntTwoPos);
 
         //Set motor power
         robot.leftDrive.setPower(leftWheelPower);
