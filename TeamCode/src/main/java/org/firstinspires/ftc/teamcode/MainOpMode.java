@@ -22,6 +22,7 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
 
     private int speedDenominator = 2; //1 = full speed, 2 = half speed, 4 = quarter speed, etc.
     private boolean first = true;
+    private boolean down = false;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -81,8 +82,11 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
         clawVerticalPower = gamepad2.right_stick_y / 2;
 
         //Switch which joint is being controlled
-        if (gamepad2.left_bumper || gamepad2.right_bumper) {
+        if ((gamepad2.left_bumper || gamepad2.right_bumper) && !down) {
+            down = true;
             first = !first;
+        } else {
+            down = false;
         }
 
         //Calculate arm joint movement
@@ -95,9 +99,9 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
 
         if(first){
             if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
-                jntOnePos += jntOpn;
+                jntOnePos -= jntOpn;
             } else if (gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
-                jntOnePos -= jntCls;
+                jntOnePos += jntCls;
             }
         } else {
             if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
@@ -135,7 +139,7 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
         telemetry.addData("Wheels", "left (%.2f), right (%.2f)", robot.leftDrive.getPower(), robot.rightDrive.getPower());
         telemetry.addData("Speed Denominator:", String.valueOf(speedDenominator));
         telemetry.addLine();
-        telemetry.addData("Arm", "Power: " + String.valueOf(robot.verticalArm.getPower()));
+        telemetry.addData("Arm", "Power: " + String.valueOf(-robot.verticalArm.getPower()));
         telemetry.addData("Currently Controlling:", (first ? "One" : "Two"));
         telemetry.addData("Joint One", "Position: " + String.valueOf(robot.clawJointOne.getPosition()));
         telemetry.addData("Joint Two", "Position: " + String.valueOf(robot.clawJointTwo.getPosition()));
