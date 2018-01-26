@@ -88,8 +88,8 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
         //Calculate arm joint movement
         robot.clawJointOne.setDirection(REVERSE);
         robot.clawJointTwo.setDirection(REVERSE);
-        float jntOpn = gamepad2.right_trigger/50;
-        float jntCls = gamepad2.left_trigger/50;
+        float jntOpn = gamepad2.right_trigger/100;
+        float jntCls = gamepad2.left_trigger/100;
         double jntOnePos = robot.clawJointOne.getPosition();
         double jntTwoPos = robot.clawJointTwo.getPosition();
 
@@ -105,6 +105,10 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
             } else if (gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
                 jntTwoPos -= jntCls;
             }
+        }
+
+        if(jntTwoPos > 0.476){
+            jntTwoPos = 0.476;
         }
 
         //Claw Extension
@@ -130,8 +134,9 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
         telemetry.addLine();
         telemetry.addData("Wheels", "left (%.2f), right (%.2f)", robot.leftDrive.getPower(), robot.rightDrive.getPower());
         telemetry.addData("Speed Denominator:", String.valueOf(speedDenominator));
-        telemetry.addData("Arm", "Power: " + String.valueOf(robot.verticalArm.getPower()));
         telemetry.addLine();
+        telemetry.addData("Arm", "Power: " + String.valueOf(robot.verticalArm.getPower()));
+        telemetry.addData("Currently Controlling:", (first ? "One" : "Two"));
         telemetry.addData("Joint One", "Position: " + String.valueOf(robot.clawJointOne.getPosition()));
         telemetry.addData("Joint Two", "Position: " + String.valueOf(robot.clawJointTwo.getPosition()));
         telemetry.addData("Claw Position:", Hardware.ClawPosition.getPosition(robot.clawRight.getPosition()).getName());
