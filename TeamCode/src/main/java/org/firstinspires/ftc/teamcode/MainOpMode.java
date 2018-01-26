@@ -85,7 +85,7 @@ public class MainOpMode extends OpMode { //TODO: Recode Joints
         if ((gamepad2.left_bumper || gamepad2.right_bumper) && !down) {
             down = true;
             first = !first;
-        } else {
+        } else if (!(gamepad2.left_bumper || gamepad2.right_bumper)) {
             down = false;
         }
 
