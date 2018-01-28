@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,6 +13,8 @@ public class Hardware {
     Servo clawJointTwo = null;
     Servo clawLeft = null;
     Servo clawRight = null;
+    Servo sensorServo = null;
+    ColorSensor colorSensor = null;
 
     private DcMotor.RunMode initialMode = null;
 
@@ -28,6 +30,8 @@ public class Hardware {
         clawJointTwo = hardwareMap.get(Servo.class, "joint_two");
         clawLeft = hardwareMap.get(Servo.class, "claw_left");
         clawRight = hardwareMap.get(Servo.class, "claw_right");
+        sensorServo = hardwareMap.get(Servo.class, "sensor_servo");
+        colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
 
         leftDrive.setMode(initialMode);
         rightDrive.setMode(initialMode);
