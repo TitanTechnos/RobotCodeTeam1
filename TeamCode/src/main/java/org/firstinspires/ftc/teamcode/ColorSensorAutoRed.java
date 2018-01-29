@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "Color - Blue Team", group = "Autonomous")
+@Autonomous(name = "Color - Red Team", group = "Autonomous")
 //@Disabled
 public class ColorSensorAutoRed extends LinearOpMode {
 
