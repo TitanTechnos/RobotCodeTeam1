@@ -15,7 +15,7 @@ import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.OPEN;
 
 @TeleOp(name="TeleOp 17-18", group="TeleOp")
 //@Disabled
-public class MainOpMode extends OpMode { //TODO: Recode Joints
+public class MainOpMode extends OpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private Hardware robot = new Hardware(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
