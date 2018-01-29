@@ -33,6 +33,8 @@ public class MainOpMode extends OpMode {
 
         //Initialize Robot
         robot.init(hardwareMap);
+        robot.colorSensor.enableLed(false);
+
 
         telemetry.addData("Status", "Initialized");
     }
@@ -53,6 +55,7 @@ public class MainOpMode extends OpMode {
         robot.clawSetPosition(OPEN);
         robot.clawJointOne.setPosition(0);
         robot.clawJointTwo.setPosition(0);
+        robot.sensorServo.setPosition(0.8);
     }
 
     /*
@@ -82,34 +85,36 @@ public class MainOpMode extends OpMode {
         clawVerticalPower = gamepad2.right_stick_y / 2;
 
         //Switch which joint is being controlled
-        if ((gamepad2.left_bumper || gamepad2.right_bumper) && !down) {
+        /*if ((gamepad2.left_bumper || gamepad2.right_bumper) && !down) {
             down = true;
             first = !first;
         } else if (!(gamepad2.left_bumper || gamepad2.right_bumper)) {
             down = false;
-        }
+        }*/
 
         //Calculate arm joint movement
         robot.clawJointOne.setDirection(REVERSE);
         robot.clawJointTwo.setDirection(REVERSE);
         float jntOpn = gamepad2.right_trigger/100;
         float jntCls = gamepad2.left_trigger/100;
+        float jntOpnTwo = gamepad1.right_trigger/100;
+        float jntClsTwo = gamepad1.left_trigger/100;
         double jntOnePos = robot.clawJointOne.getPosition();
         double jntTwoPos = robot.clawJointTwo.getPosition();
 
-        if(first){
+        /*if(first){*/
             if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
                 jntOnePos -= jntOpn;
             } else if (gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
                 jntOnePos += jntCls;
             }
-        } else {
-            if (gamepad2.right_trigger > 0 && !(gamepad2.left_trigger > 0)){
-                jntTwoPos += jntOpn;
-            } else if (gamepad2.left_trigger > 0 && !(gamepad2.right_trigger > 0)){
-                jntTwoPos -= jntCls;
+        /*} else {*/
+            if (gamepad1.right_trigger > 0 && !(gamepad1.left_trigger > 0)){
+                jntTwoPos += jntOpnTwo;
+            } else if (gamepad1.left_trigger > 0 && !(gamepad1.right_trigger > 0)){
+                jntTwoPos -= jntClsTwo;
             }
-        }
+        //}
 
         if(jntTwoPos > 0.476){
             jntTwoPos = 0.476;
