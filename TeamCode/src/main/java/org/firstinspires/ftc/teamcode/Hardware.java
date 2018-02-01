@@ -48,6 +48,8 @@ public class Hardware {
         clawLeft.setDirection(Servo.Direction.REVERSE);
         clawRight.setDirection(Servo.Direction.REVERSE);
         clawJointTwo.setDirection(Servo.Direction.REVERSE);
+
+        sensorServo.setDirection(Servo.Direction.REVERSE);
     }
 
     void clawSetPosition(ClawPosition position) {

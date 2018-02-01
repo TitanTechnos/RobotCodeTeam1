@@ -22,27 +22,27 @@ public class ColorSensorAutoBlue extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
 
-        robot.sensorServo.setPosition(0.8);
+        robot.sensorServo.setPosition(0.1);
 
         waitForStart();
         while(opModeIsActive()){
 
-            robot.sensorServo.setPosition(1);
+            robot.sensorServo.setPosition(0.8);
 
             robot.colorSensor.enableLed(true);
 
             if(robot.colorSensor.readUnsignedByte(ModernRoboticsI2cColorSensor.Register.COLOR_NUMBER)>8 && robot.colorSensor.readUnsignedByte(ModernRoboticsI2cColorSensor.Register.COLOR_NUMBER)<12){
-                robot.leftDrive.setPower(0.1);
-                robot.rightDrive.setPower(0.1);
-                sleep(250);
+                robot.leftDrive.setPower(0.5);
+                robot.rightDrive.setPower(0.5);
+                sleep(100);
             } else if(robot.colorSensor.readUnsignedByte(ModernRoboticsI2cColorSensor.Register.COLOR_NUMBER)>1 && robot.colorSensor.readUnsignedByte(ModernRoboticsI2cColorSensor.Register.COLOR_NUMBER)<5){
-                robot.leftDrive.setPower(-0.1);
-                robot.rightDrive.setPower(-0.1);
-                sleep(250);
+                robot.leftDrive.setPower(-0.5);
+                robot.rightDrive.setPower(-0.5);
+                sleep(100);
             } else {
                 robot.rightDrive.setPower(0);
                 robot.leftDrive.setPower(0);
-                sleep(250);
+                sleep(400);
             }
         }
 

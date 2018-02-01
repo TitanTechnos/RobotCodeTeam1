@@ -59,7 +59,7 @@ public class MainOpMode extends OpMode {
         robot.clawSetPosition(OPEN);
         robot.clawJointOne.setPosition(0);
         robot.clawJointTwo.setPosition(0);
-        robot.sensorServo.setPosition(0.8);
+        robot.sensorServo.setPosition(0.1);
     }
 
     /*
@@ -162,8 +162,7 @@ public class MainOpMode extends OpMode {
             Music.start(this.hardwareMap.appContext, Music.songs.get(songId));
             currentSongName = Music.songs.get(songId).getName();
             songId += 1;
-        }
-        else if (this.gamepad1.b && !gamepad1.y) {
+        } else if (this.gamepad1.b && !gamepad1.y) {
             Music.stop();
             songId = 0;
             currentSongName = "[NO MUSIC PLAYING]";
