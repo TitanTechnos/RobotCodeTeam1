@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -46,9 +45,9 @@ public class Hardware {
         rightDrive.setPower(0);
         verticalArm.setPower(0);
 
+        clawLeft.setDirection(Servo.Direction.REVERSE);
         clawRight.setDirection(Servo.Direction.REVERSE);
         clawJointTwo.setDirection(Servo.Direction.REVERSE);
-
     }
 
     void clawSetPosition(ClawPosition position) {
@@ -57,7 +56,7 @@ public class Hardware {
     }
 
     enum ClawPosition {
-        OPEN(0, "OPEN"), HALF(0.5, "HALF"), CLOSED(1.0, "CLOSED");
+        OPEN(0, "OPEN"), CLOSED(0.3, "CLOSED");
 
         private final double pos;
         private final String name;
@@ -78,11 +77,9 @@ public class Hardware {
         static ClawPosition getPosition(double pos){
             int x = (int) Math.abs(pos * 10);
             switch (x){
-                case 10:
+                case 3:
                     return CLOSED;
-                case 5:
-                    return HALF;
-                case 1:
+                case 0:
                     return OPEN;
                 default:
                     return OPEN;

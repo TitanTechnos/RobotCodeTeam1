@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.media.MediaPlayer;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,12 +12,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import static com.qualcomm.robotcore.hardware.Servo.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.Servo.Direction.REVERSE;
 import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.CLOSED;
-import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.HALF;
 import static org.firstinspires.ftc.teamcode.Hardware.ClawPosition.OPEN;
 
 @TeleOp(name="TeleOp 17-18", group="TeleOp")
 //@Disabled
 public class MainOpMode extends OpMode {
+
+    private int songId = 0;
+    private String currentSongName = "[NO MUSIC PLAYING]";
 
     private ElapsedTime runtime = new ElapsedTime();
     private Hardware robot = new Hardware(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -34,7 +38,7 @@ public class MainOpMode extends OpMode {
         //Initialize Robot
         robot.init(hardwareMap);
         robot.colorSensor.enableLed(false);
-
+        Music.initSongs();
 
         telemetry.addData("Status", "Initialized");
     }
@@ -73,8 +77,6 @@ public class MainOpMode extends OpMode {
             speedDenominator = 2;
         } else if (gamepad1.x) {
             speedDenominator = 1;
-        } else if (gamepad1.b) {
-            speedDenominator = 4;
         }
 
         //Calculate wheel power
@@ -123,8 +125,6 @@ public class MainOpMode extends OpMode {
         //Claw Extension
         if (gamepad2.b) {
             robot.clawSetPosition(CLOSED);
-        } else if (gamepad2.a) {
-            robot.clawSetPosition(HALF);
         } else if (gamepad2.x) {
             robot.clawSetPosition(OPEN);
         }
@@ -149,6 +149,30 @@ public class MainOpMode extends OpMode {
         telemetry.addData("Joint One", "Position: " + String.valueOf(robot.clawJointOne.getPosition()));
         telemetry.addData("Joint Two", "Position: " + String.valueOf(robot.clawJointTwo.getPosition()));
         telemetry.addData("Claw Position:", Hardware.ClawPosition.getPosition(robot.clawRight.getPosition()).getName());
+        telemetry.addLine();
+        telemetry.addData("Current Song:", currentSongName);
+
+        //Music Player
+        if (this.gamepad1.y && !down && !gamepad1.b) {
+            down = true;
+            Music.stop();
+            if(songId >= Music.songs.size()){
+                songId = 0;
+            }
+            Music.start(this.hardwareMap.appContext, Music.songs.get(songId));
+            currentSongName = Music.songs.get(songId).getName();
+            songId += 1;
+        }
+        else if (this.gamepad1.b && !gamepad1.y) {
+            Music.stop();
+            songId = 0;
+            currentSongName = "[NO MUSIC PLAYING]";
+            down = false;
+        } else {
+            down = false;
+        }
+
+
     }
 
     /*
@@ -156,6 +180,7 @@ public class MainOpMode extends OpMode {
      */
     @Override
     public void stop() {
+        Music.stop();
     }
 
 }
