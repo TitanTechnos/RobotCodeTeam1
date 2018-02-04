@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -15,6 +16,8 @@ public class Hardware {
     Servo clawRight = null;
     Servo sensorServo = null;
     ModernRoboticsI2cColorSensor colorSensor = null;
+    DistanceSensor distanceSensorOne = null;
+    DistanceSensor distanceSensorTwo = null;
 
     private DcMotor.RunMode initialMode = null;
 
@@ -32,6 +35,8 @@ public class Hardware {
         clawRight = hardwareMap.get(Servo.class, "claw_right");
         sensorServo = hardwareMap.get(Servo.class, "sensor_servo");
         colorSensor = hardwareMap.get(ModernRoboticsI2cColorSensor.class, "sensor_color");
+        distanceSensorOne = hardwareMap.get(DistanceSensor.class, "sensor_distance_one");
+        distanceSensorOne = hardwareMap.get(DistanceSensor.class, "sensor_distance_two");
 
         leftDrive.setMode(initialMode);
         rightDrive.setMode(initialMode);
