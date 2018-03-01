@@ -48,5 +48,13 @@ public class CompactDriving extends OpMode{
             }
         }
 
+        robot.leftDrive.setPower(leftPower);
+        robot.rightDrive.setPower(rightPower);
+
+        telemetry.addData("Left Wheel Power:", String.valueOf(robot.leftDrive.getPower()));
+        telemetry.addData("Right Wheel Power:", String.valueOf(robot.rightDrive.getPower()));
+        telemetry.addData("Left Stick X:", String.valueOf(gamepad1.left_stick_x));
+        telemetry.addData("Right Stick Y:", String.valueOf(gamepad1.right_stick_y));
+
     }
 }
