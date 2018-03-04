@@ -30,13 +30,11 @@ public class CompactDriving extends OpMode{
                 rightPower = gamepad1.left_stick_x;
                 leftPower = -gamepad1.left_stick_x;
             } else {
-                leftPower = gamepad1.right_stick_y;
-                rightPower = gamepad1.right_stick_y;
-                double x = mapTurns(gamepad1.left_stick_x);
+                double turnMultiplier = mapTurns(gamepad1.left_stick_x);
                 if (gamepad1.left_stick_x > 0) {
-                    rightPower *= x;
+                    rightPower *= turnMultiplier;
                 } else {
-                    leftPower *= x;
+                    leftPower *= turnMultiplier;
                 }
             }
         }
