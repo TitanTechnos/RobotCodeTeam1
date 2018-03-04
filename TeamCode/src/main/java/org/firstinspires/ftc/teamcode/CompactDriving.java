@@ -27,8 +27,7 @@ public class CompactDriving extends OpMode{
 
         leftPower = gamepad1.right_stick_y;
         rightPower = gamepad1.right_stick_y;
-
-
+        
         if(gamepad1.left_stick_x != 0) {
             if (gamepad1.right_stick_y == 0) {
                 rightPower = gamepad1.left_stick_x;
