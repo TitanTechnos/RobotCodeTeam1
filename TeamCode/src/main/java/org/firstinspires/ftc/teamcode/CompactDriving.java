@@ -25,21 +25,23 @@ public class CompactDriving extends OpMode{
         double leftPower = 0;
         double rightPower = 0;
 
-        if(gamepad1.right_stick_y != 0 && gamepad1.left_stick_x == 0){
-            leftPower = gamepad1.right_stick_y;
-            rightPower = gamepad1.right_stick_y;
-        } else if(gamepad1.left_stick_x != 0 && gamepad1.right_stick_y == 0) {
-            rightPower = gamepad1.left_stick_x;
-            leftPower = -gamepad1.left_stick_x;
-        } else if(gamepad1.left_stick_x != 0){
-            leftPower = gamepad1.right_stick_y;
-            rightPower = gamepad1.right_stick_y;
-            if(gamepad1.left_stick_x > 0){
-                double x = -Math.abs(gamepad1.left_stick_x) +1;
-                rightPower *= x;
+        leftPower = gamepad1.right_stick_y;
+        rightPower = gamepad1.right_stick_y;
+
+
+        if(gamepad1.left_stick_x != 0) {
+            if (gamepad1.right_stick_y == 0) {
+                rightPower = gamepad1.left_stick_x;
+                leftPower = -gamepad1.left_stick_x;
             } else {
-                double x = -Math.abs(gamepad1.left_stick_x) +1;
-                leftPower *= x;
+                leftPower = gamepad1.right_stick_y;
+                rightPower = gamepad1.right_stick_y;
+                double x = mapTurns(gamepad1.left_stick_x);
+                if (gamepad1.left_stick_x > 0) {
+                    rightPower *= x;
+                } else {
+                    leftPower *= x;
+                }
             }
         }
 
@@ -52,4 +54,9 @@ public class CompactDriving extends OpMode{
         telemetry.addData("Right Stick Y:", String.valueOf(gamepad1.right_stick_y));
 
     }
+
+    private double mapTurns(double x){
+        return (-(Math.abs(x))) + 1;
+    }
+
 }
