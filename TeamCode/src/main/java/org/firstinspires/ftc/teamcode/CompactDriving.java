@@ -29,13 +29,8 @@ public class CompactDriving extends OpMode{
             leftPower = gamepad1.right_stick_y;
             rightPower = gamepad1.right_stick_y;
         } else if(gamepad1.left_stick_x != 0 && gamepad1.right_stick_y == 0) {
-            if(gamepad1.left_stick_x > 0){
-                rightPower = gamepad1.left_stick_x;
-                leftPower = -gamepad1.left_stick_x;
-            } else {
-                rightPower = -gamepad1.left_stick_x;
-                leftPower = gamepad1.left_stick_x;
-            }
+            rightPower = gamepad1.left_stick_x;
+            leftPower = -gamepad1.left_stick_x;
         } else if(gamepad1.left_stick_x != 0){
             leftPower = gamepad1.right_stick_y;
             rightPower = gamepad1.right_stick_y;
