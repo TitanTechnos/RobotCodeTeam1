@@ -22,11 +22,8 @@ public class CompactDriving extends OpMode{
 
     @Override
     public void loop() {
-        double leftPower = 0;
-        double rightPower = 0;
-
-        leftPower = gamepad1.right_stick_y;
-        rightPower = gamepad1.right_stick_y;
+        double leftPower = gamepad1.right_stick_y;
+        double rightPower = gamepad1.right_stick_y;
         
         if(gamepad1.left_stick_x != 0) {
             if (gamepad1.right_stick_y == 0) {
