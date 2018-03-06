@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+@TeleOp(name="Compact Driving", group="TeleOp")
 public class CompactDriving extends OpMode{
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -22,16 +24,16 @@ public class CompactDriving extends OpMode{
 
     @Override
     public void loop() {
-        double leftPower = gamepad1.right_stick_y;
-        double rightPower = gamepad1.right_stick_y;
+        double leftPower = gamepad1.right_stick_y/2;
+        double rightPower = gamepad1.right_stick_y/2;
         
-        if(gamepad1.left_stick_x != 0) {
+        if(gamepad1.right_stick_x != 0) {
             if (gamepad1.right_stick_y == 0) {
-                rightPower = gamepad1.left_stick_x;
-                leftPower = -gamepad1.left_stick_x;
+                rightPower = gamepad1.right_stick_x/2;
+                leftPower = -gamepad1.right_stick_x/2;
             } else {
-                double turnMultiplier = mapTurns(gamepad1.left_stick_x);
-                if (gamepad1.left_stick_x > 0) {
+                double turnMultiplier = mapTurns(gamepad1.right_stick_x);
+                if (gamepad1.right_stick_x > 0) {
                     rightPower *= turnMultiplier;
                 } else {
                     leftPower *= turnMultiplier;
@@ -44,7 +46,7 @@ public class CompactDriving extends OpMode{
 
         telemetry.addData("Left Wheel Power:", String.valueOf(robot.leftDrive.getPower()));
         telemetry.addData("Right Wheel Power:", String.valueOf(robot.rightDrive.getPower()));
-        telemetry.addData("Left Stick X:", String.valueOf(gamepad1.left_stick_x));
+        telemetry.addData("Left Stick X:", String.valueOf(gamepad1.right_stick_x));
         telemetry.addData("Right Stick Y:", String.valueOf(gamepad1.right_stick_y));
 
     }
